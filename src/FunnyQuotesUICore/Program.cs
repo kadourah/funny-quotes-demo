@@ -3,8 +3,8 @@ using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
-using Pivotal.Extensions.Configuration.ConfigServer;
 using Steeltoe.Extensions.Logging;
+using Steeltoe.Extensions.Configuration.ConfigServer;
 
 namespace FunnyQuotesUICore
 {
