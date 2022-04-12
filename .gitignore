@@ -267,3 +267,5 @@ paket-files/
 __pycache__/
 *.pyc
 
+/src/note.txt
+/src/nuget.exe

@@ -88,9 +88,10 @@ class Build : NukeBuild
     GitHubClient GitHubClient { get; set; }
     string GitHubOwner { get; set; }
     string GitHubRepo { get; set; }
-
+    
     protected override void OnBuildInitialized()
     {
+       // System.Diagnostics.Debugger.Launch();
         GitHubClient = new GitHubClient(new ProductHeaderValue("nuke-build"))
         {
             Credentials = new Credentials(GitHubToken, AuthenticationType.Bearer)
@@ -115,6 +116,7 @@ class Build : NukeBuild
         .Executes(() =>
         {
             MSBuild(s => s
+                .SetProcessToolPath(@"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe")
                 .SetTargetPath(Solution)
                 .SetTargets("Restore"));
         });
@@ -130,6 +132,7 @@ class Build : NukeBuild
             var webProjects = Projects.TargetDeployable
                 .Where(x => x == Projects.FunnyQuotesUIForms || x == Projects.FunnyQuotesLegacyService);
             MSBuild(s => s
+                .SetProcessToolPath(@"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe")
                 .SetTargets("Rebuild")
                 .SetConfiguration(Configuration)
                 .SetMaxCpuCount(Environment.ProcessorCount)
@@ -149,6 +152,7 @@ class Build : NukeBuild
                 ));
             if(Projects.TargetDeployable.Contains(Projects.FunnyQuotesOwinWindowsService))
                 MSBuild(s => s
+                    .SetProcessToolPath(@"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe")
                     .SetTargets("Rebuild")
                     .SetVerbosity(MSBuildVerbosity.Minimal)
                     .SetConfiguration(Configuration)
