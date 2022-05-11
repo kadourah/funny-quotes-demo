@@ -1,0 +1,32 @@
+FROM mcr.microsoft.com/dotnet/framework/sdk:4.8 AS build
+# break the build into stages to take advantage of caching so we don't pull nuget every time
+WORKDIR /src/
+copy funnyquotes.sln .
+copy FunnyQuotesLegacyService/FunnyQuotesLegacyService.csproj ./FunnyQuotesLegacyService/
+copy FunnyQuotesUIForms/FunnyQuotesUIForms.csproj ./FunnyQuotesUIForms/
+copy FunnyQuotesCookieDatabase ./FunnyQuotesCookieDatabase/
+copy FunnyQuotesLegacyCommon ./FunnyQuotesLegacyCommon/
+copy FunnyQuotesCommon ./FunnyQuotesCommon/
+copy FunnyQuotesOwinWindowsService ./FunnyQuotesOwinWindowsService/
+copy FunnyQuotesServicesOwin ./FunnyQuotesServicesOwin/
+Run nuget restore funnyquotes.sln -PackagesDirectory packages
+
+# copy everything from solution dir into the /src/funnyquotes
+COPY . .
+
+# use msbuild to publish project in /FramworkApp folder to c:\publish, which includes only binaries and content files (no sources)
+RUN msbuild "FunnyQuotesLegacyService\FunnyQuotesLegacyService.csproj" /p:DeployOnBuild=true /p:PublishUrl=c:\publish\ /p:WebPublishMethod=FileSystem /p:DeployDefaultTarget=WebPublish /verbosity:Minimal
+
+RUN msbuild "FunnyQuotesUIForms\FunnyQuotesUIForms.csproj" /maxcpucount:16 /nodeReuse:True /p:DeployOnBuild=True /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:PackageAsSingleFile=false /p:SkipInvalidConfigurations=true /p:Configuration=Debug /p:PublishUrl=c:\publish\ /target:Rebuild /verbosity:Minimal
+
+RUN msbuild "FunnyQuotesOwinWindowsService\FunnyQuotesOwinWindowsService.csproj"  /p:Configuration=Debug /p:OutDir=c:\publish\ /target:Rebuild /verbosity:Minimal
+
+
+# start with new base image for running asp.net apps (which contains IIS)
+FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8 AS runtime
+
+# set default work folder to c:\inetpub\wwwroot (IIS root)
+WORKDIR /inetpub/wwwroot
+
+# copy files from bin/publish in our sdk container into c:\inetpub\wwwroot
+COPY --from=build /publish. ./

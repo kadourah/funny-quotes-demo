@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "funnyquotesuiforms",
+      "composeLaunchUrl": "http://{ServiceIPAddress}",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "funnyquotesuiforms": "StartDebugging"
+      }
+    }
+  }
+}

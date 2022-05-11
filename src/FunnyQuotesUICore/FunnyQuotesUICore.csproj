@@ -1,8 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Dockerfile" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
     <PackageReference Include="Polly" Version="7.2.1" />
     <PackageReference Include="Steeltoe.CircuitBreaker.HystrixCore" Version="3.0.1" />
     <PackageReference Include="Steeltoe.Discovery.Eureka" Version="3.0.1" />
@@ -20,19 +25,19 @@
     <ProjectReference Include="..\FunnyQuotesCommon\FunnyQuotesCommon.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\config\application.yaml">
+    <Content Include="..\config\application.yaml">
       <Link>global-default.yaml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\config\application-Development.yaml">
+    <Content Include="..\config\application-Development.yaml">
       <Link>global-default.Development.yaml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\config\FunnyQuotesUICore.yaml">
+    <Content Include="..\config\FunnyQuotesUICore.yaml">
       <Link>appsettings.yaml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\config\FunnyQuotesUICore-Development.yaml">
+    <Content Include="..\config\FunnyQuotesUICore-Development.yaml">
       <Link>appsettings.Development.yaml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -45,5 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="..\.dockerignore" />
   </ItemGroup>
 </Project>

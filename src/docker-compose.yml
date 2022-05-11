@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  funnyquotesuiforms:
+    image: ${DOCKER_REGISTRY-}funnyquotesuiforms
+    build:
+      context: .\FunnyQuotesUIForms
+      dockerfile: Dockerfile

@@ -1,9 +1,0 @@
-Spring:
-  Application:
-    Name: FunnyQuotesUIForms
-Eureka:
-  Client:
-    HealthMonitoredApps: FunnyQuotesOwinWindowsService,FunnyQuotesLegacyService
-    ShouldRegisterWithEureka: false
-    ValidateCertificates: false
-    

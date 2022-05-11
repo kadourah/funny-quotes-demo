@@ -8,7 +8,7 @@ using FunnyQuotesCommon;
 using FunnyQuotesUIForms.Clients;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Steeltoe.CircuitBreaker.Hystrix;
+//using Steeltoe.CircuitBreaker.Hystrix;
 using Steeltoe.Common.Configuration.Autofac;
 using Steeltoe.Common.HealthChecks;
 using Steeltoe.Common.Logging.Autofac;
@@ -45,7 +45,7 @@ namespace FunnyQuotesUIForms
                 
                 builder.RegisterLogging(config); // allow loggers to be injectable by AutoFac
                 builder.RegisterType<DynamicConsoleLoggerProvider>().As<ILoggerProvider>().AsSelf(); // via management endpoints
-                builder.RegisterHystrixMetricsStream(config);
+               // builder.RegisterHystrixMetricsStream(config);
                 
                 builder.RegisterType<DiskSpaceContributor>().As<IHealthContributor>();
                 builder.RegisterType<ConfigServerHealthContributor>().As<IHealthContributor>();
@@ -66,7 +66,7 @@ namespace FunnyQuotesUIForms
 
                 var container = builder.Build();
                 container.StartDiscoveryClient(); // start eureka client and add current app into the registry
-                container.StartHystrixMetricsStream(); // start publishing hystrix stream
+             //   container.StartHystrixMetricsStream(); // start publishing hystrix stream
                 container.StartActuators(); // map routes for actuator endpoints
                 _containerProvider = new ContainerProvider(container); // setup autofac WebForms integration
                 
